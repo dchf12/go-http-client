@@ -1,19 +1,23 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"time"
 )
 
 func main() {
 	client := &http.Client{}
-	req, err := http.NewRequest("DETETE", "http://localhost:18888", nil)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:18888/slow_page", nil)
 	if err != nil {
 		panic(err)
 	}
-	req.Header.Add("Content-Type", "application/json")
-	req.AddCookie(&http.Cookie{Name: "auth", Value: "some value"})
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
