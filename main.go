@@ -12,6 +12,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	req.Header.Add("Content-Type", "application/json")
+	req.AddCookie(&http.Cookie{Name: "auth", Value: "some value"})
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
